@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+<title>Global Hospitality CV Pro</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#060911;color:#f1f5f9;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:#0d1117;}
+::-webkit-scrollbar-thumb{background:#1e293b;border-radius:3px;}
+::placeholder{color:#334155!important;}
+textarea,input,select{font-family:inherit!important;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.fade{animation:fadeIn 0.3s ease;}
+#apiBar{background:#1a1505;border-bottom:1px solid #78350f;padding:10px 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+#apiBar label{color:#d4af37;font-size:12px;font-weight:700;white-space:nowrap;}
+#apiKey{flex:1;min-width:180px;padding:8px 12px;border-radius:8px;background:#0a0f1a;border:1px solid #78350f;color:#f1f5f9;font-size:13px;outline:none;}
+#apiKey:focus{border-color:#d4af37;}
+#saveKeyBtn{padding:8px 16px;border-radius:8px;border:none;background:#d4af37;color:#0a0a0f;font-weight:700;font-size:12px;cursor:pointer;}
+#keyStatus{font-size:11px;color:#94a3b8;width:100%;}
+#header{background:#080b11;border-bottom:1px solid #1e293b;position:sticky;top:0;z-index:100;}
+#headerInner{max-width:1020px;margin:0 auto;padding:0 14px;}
+#logoRow{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding-top:12px;}
+#logoIcon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#d4af37,#b8860b);display:flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 4px 16px rgba(212,175,55,0.35);flex-shrink:0;}
+#logoTitle{font-size:16px;font-weight:900;background:linear-gradient(90deg,#d4af37,#f5c842);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+#logoSub{font-size:9.5px;color:#334155;letter-spacing:1.5px;text-transform:uppercase;margin-top:1px;}
+#tabs{display:flex;gap:1px;padding-top:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+#tabs::-webkit-scrollbar{display:none;}
+.tb{padding:8px 12px;border:none;border-radius:7px;cursor:pointer;font-weight:500;font-size:12px;font-family:inherit;transition:all .18s;display:flex;align-items:center;gap:4px;white-space:nowrap;background:transparent;color:#94a3b8;}
+.tb.active{background:#d4af37;color:#0a0a0f;font-weight:700;}
+#content{max-width:1020px;margin:0 auto;padding:20px 14px 80px;}
+.card{background:#0d1117;border-radius:12px;margin-bottom:14px;border:1px solid #1e293b;padding:16px 18px;}
+.card.gold{border-color:#b8860b;}
+.card.dark{background:#080c12;}
+.fld{margin-bottom:13px;}
+.fld label{display:block;color:#d4af37;font-size:11px;font-weight:700;margin-bottom:4px;text-transform:uppercase;letter-spacing:.9px;}
+.fld .hint{color:#64748b;font-size:11px;margin:0 0 5px;line-height:1.4;}
+.fld input,.fld textarea,.fld select{width:100%;padding:9px 13px;border-radius:8px;background:#0a0f1a;border:1px solid #1e293b;color:#f1f5f9;font-size:13px;outline:none;transition:border-color .2s;resize:vertical;line-height:1.5;}
+.fld input:focus,.fld textarea:focus,.fld select:focus{border-color:#d4af37;}
+.btn{padding:9px 18px;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:13px;font-family:inherit;transition:all .18s;display:inline-flex;align-items:center;gap:6px;justify-content:center;}
+.btn.pri{background:#d4af37;color:#0a0a0f;}
+.btn.sec{background:#1e293b;color:#f1f5f9;}
+.btn.ghost{background:transparent;color:#d4af37;border:1px solid #d4af37;}
+.btn.danger{background:#450a0a;color:#f87171;border:1px solid #7f1d1d;}
+.btn.grn{background:#052e16;color:#4ade80;border:1px solid #166534;}
+.btn.sm{padding:6px 13px;font-size:12px;}
+.btn.full{width:100%;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 18px;}
+.g2g{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+@media(max-width:600px){.g2,.g2g{grid-template-columns:1fr;gap:0;}.g3{grid-template-columns:1fr 1fr;}}
+@media(max-width:400px){.g3{grid-template-columns:1fr;}}
+.alrt{border-radius:8px;padding:10px 14px;font-size:12.5px;margin-bottom:12px;display:flex;gap:7px;align-items:flex-start;line-height:1.5;}
+.alrt.err{background:#1a0505;border:1px solid #7f1d1d;color:#f87171;}
+.alrt.ok{background:#052e16;border:1px solid #166534;color:#4ade80;}
+.alrt.info{background:#0c1f3a;border:1px solid #1e40af;color:#60a5fa;}
+.alrt.warn{background:#1c1000;border:1px solid #78350f;color:#fbbf24;}
+.tag{padding:3px 9px;border-radius:20px;font-size:11px;display:inline-block;margin:2px 2px 2px 0;}
+.tag-row{display:flex;flex-wrap:wrap;gap:3px;}
+.spin-wrap{text-align:center;padding:32px 16px;}
+.spin{width:36px;height:36px;border:3px solid #1e293b;border-top:3px solid #d4af37;border-radius:50%;animation:spin .75s linear infinite;margin:0 auto 12px;}
+.spin-txt{color:#d4af37;font-size:13px;}
+.uz{border:2px dashed #1e293b;border-radius:12px;padding:26px 14px;text-align:center;cursor:pointer;background:#080c12;transition:all .2s;margin-bottom:8px;}
+.uz:hover,.uz.drag{border-color:#d4af37;background:#1a1505;}
+.uz.has-file{border-color:#166534;background:#052e16;}
+.rings-row{display:flex;justify-content:space-around;flex-wrap:wrap;gap:14px;margin-bottom:18px;}
+.mc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+@media(max-width:480px){.mc-grid{grid-template-columns:1fr;}}
+.mc{padding:14px 12px;border-radius:12px;border:2px solid #1e293b;background:#080c12;color:#64748b;cursor:pointer;text-align:left;font-family:inherit;transition:all .2s;}
+.mc.active{border-color:#d4af37;background:#1a1505;color:#d4af37;}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.pill{padding:5px 13px;border-radius:20px;border:1px solid #1e293b;background:transparent;color:#64748b;cursor:pointer;font-size:12px;font-weight:600;font-family:inherit;transition:all .18s;}
+.pill.active{border-color:#d4af37;background:#1a1505;color:#d4af37;}
+.opill{padding:5px 11px;border-radius:20px;border:1px solid #1e293b;background:transparent;color:#64748b;cursor:pointer;font-size:11.5px;font-family:inherit;}
+.opill.active{border-color:#d4af37;background:#1a1505;color:#d4af37;}
+.cv-pre{background:#080c12;padding:16px;border-radius:8px;border:1px solid #1e293b;color:#e2e8f0;font-size:12px;line-height:1.7;white-space:pre-wrap;font-family:'Courier New',monospace;max-height:480px;overflow-y:auto;}
+.cl-pre{background:#080c12;padding:16px;border-radius:8px;border:1px solid #1e293b;color:#e2e8f0;font-size:13px;line-height:1.85;white-space:pre-wrap;font-family:Georgia,serif;max-height:480px;overflow-y:auto;}
+.hg{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;}
+@media(max-width:480px){.hg{grid-template-columns:repeat(2,1fr);}}
+.hi{display:flex;align-items:center;gap:5px;padding:5px 9px;border-radius:7px;font-size:11.5px;}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:560px){.sg{grid-template-columns:1fr;}}
+.vi{display:flex;justify-content:space-between;align-items:center;padding:9px 13px;border-radius:8px;background:#080c12;margin-bottom:7px;gap:8px;flex-wrap:wrap;}
+.lg-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+@media(max-width:560px){.lg-grid{grid-template-columns:1fr 1fr;}}
+.lg-card{padding:10px;border-radius:10px;border:2px solid #1e293b;background:#080c12;cursor:pointer;text-align:center;font-family:inherit;transition:all .2s;}
+.lg-card.active{border-color:#d4af37;background:#1a1505;color:#d4af37;}
+/* TRACKER */
+.trk-row{display:grid;grid-template-columns:2fr 1.2fr 1fr 1fr auto;gap:8px;align-items:center;padding:10px 14px;border-radius:8px;background:#080c12;margin-bottom:7px;border:1px solid #1e293b;}
+@media(max-width:640px){.trk-row{grid-template-columns:1fr 1fr;gap:6px;}}
+.status-badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-align:center;}
+/* SALARY */
+.sal-bar{height:10px;border-radius:5px;background:#1e293b;margin:6px 0;overflow:hidden;}
+.sal-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,#d4af37,#f5c842);transition:width 1s ease;}
+/* COMPARE */
+.cmp-col{border-radius:10px;border:1px solid #1e293b;padding:14px;background:#080c12;}
+.cmp-col.best{border-color:#166534;background:#030f07;}
+/* PHOTO TOGGLE */
+.photo-placeholder{width:100px;height:120px;border-radius:8px;border:2px dashed #d4af37;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#1a1505;cursor:pointer;flex-shrink:0;}
+</style>
+</head>
+<body>
+
+<!-- API KEY BAR -->
+<div id="apiBar">
+  <label>🔑 API Key:</label>
+  <input type="password" id="apiKey" placeholder="sk-ant-api03-… (get free at console.anthropic.com)"/>
+  <button id="saveKeyBtn">Save Key</button>
+  <div id="keyStatus">Key stored only in this browser. <a href="https://console.anthropic.com" target="_blank" style="color:#d4af37;">Get free key →</a></div>
+</div>
+
+<!-- HEADER -->
+<div id="header">
+  <div id="headerInner">
+    <div id="logoRow">
+      <div style="display:flex;align-items:center;gap:9px;">
+        <div id="logoIcon">🍽️</div>
+        <div><div id="logoTitle">Global Hospitality CV Pro</div><div id="logoSub">ATS Optimization Engine</div></div>
+      </div>
+      <div id="hdrBadges" style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;"></div>
+    </div>
+    <div id="tabs">
+      <button class="tb active" data-tab="profile">👤 Profile</button>
+      <button class="tb" data-tab="cv">📄 Generate CV</button>
+      <button class="tb" data-tab="cover">✉️ Cover Letter</button>
+      <button class="tb" data-tab="analyze">🔍 Analyze JD</button>
+      <button class="tb" data-tab="health">🩺 Health Check</button>
+      <button class="tb" data-tab="compare">📊 CV Compare</button>
+      <button class="tb" data-tab="multi">🌍 Multi-Lang CV</button>
+      <button class="tb" data-tab="salary">💰 Salary Guide</button>
+      <button class="tb" data-tab="tracker">📧 Job Tracker</button>
+      <button class="tb" data-tab="reference">📝 Reference Letter</button>
+    </div>
+  </div>
+</div>
+
+<div id="content"></div>
+
+<div style="border-top:1px solid #080c14;padding:12px 16px;text-align:center;">
+  <p style="color:#1e293b;font-size:11px;">🏨 Marriott · Hilton · Hyatt · Accor · IHG · Jumeirah · Four Seasons · Mandarin Oriental · Fairmont</p>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// CORE SETUP
+// ══════════════════════════════════════
+const SK='hcv_v3';
+const ld=()=>{try{return JSON.parse(localStorage.getItem(SK)||'{}')}catch{return{}}};
+const sv=d=>{try{localStorage.setItem(SK,JSON.stringify(d))}catch{}};
+let store=ld();
+let apiKey=store.apiKey||'';
+let profile=store.profile||{};
+let cvVersions=store.cvVersions||[];
+let jobTracker=store.jobTracker||[];
+let activeTab='profile';
+
+// API key UI
+document.getElementById('apiKey').value=apiKey?'••••••••••••••••••':'';
+document.getElementById('saveKeyBtn').onclick=()=>{
+  const v=document.getElementById('apiKey').value.trim();
+  if(!v||v.startsWith('•')){setKeyStatus('Paste your actual key first.','err');return;}
+  apiKey=v;store.apiKey=v;sv(store);
+  document.getElementById('apiKey').value='••••••••••••••••••';
+  setKeyStatus('✅ Key saved!','ok');
+};
+function setKeyStatus(msg,type){
+  const el=document.getElementById('keyStatus');
+  el.innerHTML=`<span style="color:${type==='ok'?'#4ade80':'#f87171'}">${msg}</span> <a href="https://console.anthropic.com" target="_blank" style="color:#d4af37;">Get free key →</a>`;
+}
+
+const SYS=`You are an elite hospitality CV specialist and ATS expert with 20 years placing chefs and hospitality professionals at Marriott, Hilton, Hyatt, Accor, IHG, Jumeirah. Write in a confident, natural human voice — never robotic. Always respond with valid JSON only — no markdown fences, no extra text.`;
+
+async function ai(prompt,maxTok=1800){
+  if(!apiKey)throw new Error('Please enter your Anthropic API key first.');
+  const r=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:maxTok,system:SYS,messages:[{role:'user',content:prompt}]})
+  });
+  const d=await r.json();
+  if(d.error)throw new Error(d.error.message);
+  return d.content.map(b=>b.text||'').join('');
+}
+
+function pj(raw){return JSON.parse(raw.replace(/```json|```/g,'').trim());}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function dlFile(text,name){const b=new Blob([text],{type:'text/plain'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=name;a.click();URL.revokeObjectURL(u);}
+function readFile(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsText(file);});}
+function scoreCol(s){return s>=80?'#4ade80':s>=60?'#f59e0b':'#f87171';}
+
+function ring(score,label,size=80){
+  const r=size/2-9,ci=2*Math.PI*r,d=Math.max(0,Math.min(score,100))/100*ci,col=scoreCol(score);
+  return `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+    <svg width="${size}" height="${size}">
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="#1e293b" stroke-width="7"/>
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${col}" stroke-width="7"
+        stroke-dasharray="${d} ${ci}" stroke-linecap="round" transform="rotate(-90 ${size/2} ${size/2})"/>
+      <text x="50%" y="50%" text-anchor="middle" dy=".38em"
+        style="fill:${col};font-size:${size*.21}px;font-weight:800;font-family:inherit;">${score}</text>
+    </svg>
+    <span style="font-size:10px;color:#94a3b8;text-align:center;max-width:${size+10}px;line-height:1.3;">${label}</span>
+  </div>`;
+}
+
+function tags(items,col,bg,bdr){
+  if(!items?.length)return'<span style="color:#64748b;font-size:11px;">None</span>';
+  return items.map(it=>`<span class="tag" style="color:${col};background:${bg};border:1px solid ${bdr};">${esc(it)}</span>`).join('');
+}
+
+function alrt(msg,type='err'){
+  const ic={err:'⚠️',ok:'✅',info:'ℹ️',warn:'💡'};
+  return`<div class="alrt ${type}"><span>${ic[type]}</span><span>${msg}</span></div>`;
+}
+
+function spinner(txt){return`<div class="spin-wrap"><div class="spin"></div><p class="spin-txt">${txt}</p></div>`;}
+
+function profStr(){return`Name:${profile.name||''} Title:${profile.title||''}\nEmail:${profile.email||''} Phone:${profile.phone||''} Location:${profile.location||''}\nSummary:${profile.summary||''}\nExperience:${profile.experience||''}\nEducation:${profile.education||''}\nSkills:${profile.skills||''}\nLanguages:${profile.languages||''}\nAwards:${profile.awards||''}`;}
+
+// Tab switching
+document.getElementById('tabs').onclick=e=>{
+  const b=e.target.closest('.tb');
+  if(b)setTab(b.dataset.tab);
+};
+function setTab(t){
+  activeTab=t;
+  document.querySelectorAll('.tb').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));
+  render();
+}
+
+function updBadges(){
+  const done=profile.name&&profile.experience;
+  document.getElementById('hdrBadges').innerHTML=profile.name
+    ?`<span style="background:#0d1117;border:1px solid #1e293b;border-radius:20px;padding:4px 12px;font-size:12px;color:#94a3b8;">👋 ${esc(profile.name)}${done?' <span style="color:#4ade80">✅</span>':''}</span>`
+    :`<span style="background:#140800;border:1px solid #78350f;border-radius:20px;padding:4px 12px;font-size:12px;color:#fbbf24;cursor:pointer;" onclick="setTab('profile')">⚠️ Complete profile</span>`;
+}
+
+function render(){
+  updBadges();
+  const c=document.getElementById('content');
+  const map={profile:renderProfile,cv:renderCV,cover:renderCover,analyze:renderAnalyze,health:renderHealth,compare:renderCompare,multi:renderMulti,salary:renderSalary,tracker:renderTracker,reference:renderReference};
+  c.innerHTML=(map[activeTab]||renderProfile)();
+  bindTab();
+}
+
+// ══════════════════════════════════════
+// PROFILE
+// ══════════════════════════════════════
+function renderProfile(){
+  const p=profile;
+  const checks=[
+    {k:'name',l:'Full Name',done:!!p.name},{k:'email',l:'Email',done:!!p.email},
+    {k:'phone',l:'Phone',done:!!p.phone},{k:'title',l:'Job Title',done:!!p.title},
+    {k:'summary',l:'Summary',done:!!p.summary},
+    {k:'experience',l:'Experience',done:!!(p.experience&&p.experience.length>50)},
+    {k:'education',l:'Education',done:!!p.education},{k:'skills',l:'Skills',done:!!p.skills},
+    {k:'languages',l:'Languages',done:!!p.languages},
+  ];
+  const sc=Math.round(checks.filter(c=>c.done).length/checks.length*100);
+  return`
+  <h2 style="color:#d4af37;font-size:18px;margin:0 0 4px;">👤 My Profile</h2>
+  <p style="color:#64748b;font-size:13px;margin-bottom:18px;">Saved permanently. Auto-fills every CV, letter and tool — fill once.</p>
+  <div class="card dark">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+      <div><h4 style="color:#d4af37;margin:0 0 3px;font-size:13px;">🩺 Profile Health</h4>
+        <p style="color:#64748b;font-size:11.5px;margin:0;">${sc===100?'Perfect — all fields complete.':checks.filter(c=>!c.done).length+' fields missing'}</p></div>
+      ${ring(sc,'Complete',68)}</div>
+    <div class="hg">${checks.map(c=>`<div class="hi" style="background:${c.done?'#052e16':'#1a0505'};border:1px solid ${c.done?'#166534':'#7f1d1d'};"><span>${c.done?'✅':'❌'}</span><span style="color:${c.done?'#4ade80':'#f87171'};">${c.l}</span></div>`).join('')}</div>
+  </div>
+  <div id="pSaveMsg"></div>
+  <div class="card">
+    <h4 style="color:#d4af37;font-size:11px;margin:0 0 12px;text-transform:uppercase;letter-spacing:.9px;">📋 Personal Info</h4>
+    <div class="g2">
+      <div class="fld"><label>Full Name *</label><input id="pName" value="${esc(p.name||'')}" placeholder="Marco Rossi"/></div>
+      <div class="fld"><label>Job Title *</label><input id="pTitle" value="${esc(p.title||'')}" placeholder="Sous Chef / Executive Chef"/></div>
+      <div class="fld"><label>Email *</label><input id="pEmail" type="email" value="${esc(p.email||'')}" placeholder="your@email.com"/></div>
+      <div class="fld"><label>Phone *</label><input id="pPhone" value="${esc(p.phone||'')}" placeholder="+971 50 000 0000"/></div>
+      <div class="fld"><label>Location / Nationality</label><input id="pLocation" value="${esc(p.location||'')}" placeholder="Dubai, UAE | Italian"/></div>
+      <div class="fld"><label>LinkedIn</label><input id="pLinkedin" value="${esc(p.linkedin||'')}" placeholder="linkedin.com/in/yourname"/></div>
+    </div>
+  </div>
+  <div class="card">
+    <h4 style="color:#d4af37;font-size:11px;margin:0 0 12px;text-transform:uppercase;letter-spacing:.9px;">💼 Professional Details</h4>
+    <div class="fld"><label>Professional Summary *</label><p class="hint">2–3 strong sentences. Opening hook on every CV.</p>
+      <textarea id="pSummary" rows="3" placeholder="Accomplished Sous Chef with 8+ years across 5-star hotel kitchens…">${esc(p.summary||'')}</textarea></div>
+    <div class="fld"><label>Work Experience *</label><p class="hint">Job Title | Company | Location | Dates then bullet points.</p>
+      <textarea id="pExperience" rows="7" placeholder="Sous Chef | Marriott Dubai | Jan 2021–Present&#10;• Led brigade of 12&#10;• Managed 400+ daily covers&#10;• Reduced food waste 18%">${esc(p.experience||'')}</textarea></div>
+    <div class="fld"><label>Education & Certifications</label>
+      <textarea id="pEducation" rows="3" placeholder="Diploma Culinary Arts | Le Cordon Bleu | 2016&#10;HACCP Level 3 | 2022">${esc(p.education||'')}</textarea></div>
+    <div class="g2">
+      <div class="fld"><label>Key Skills</label><textarea id="pSkills" rows="3" placeholder="Fine Dining, Menu Dev, Food Cost Control, HACCP…">${esc(p.skills||'')}</textarea></div>
+      <div class="fld"><label>Languages</label><textarea id="pLanguages" rows="3" placeholder="English (Fluent), Italian (Native), Arabic (Basic)">${esc(p.languages||'')}</textarea></div>
+    </div>
+    <div class="fld"><label>Awards</label><textarea id="pAwards" rows="2" placeholder="Chef of the Year — Marriott GCC 2023">${esc(p.awards||'')}</textarea></div>
+  </div>
+  <div style="display:flex;gap:9px;"><button class="btn pri" id="saveProfBtn">💾 Save Profile</button><button class="btn sec" id="resetProfBtn">↩ Reset</button></div>`;
+}
+
+// ══════════════════════════════════════
+// CV GENERATOR
+// ══════════════════════════════════════
+let cvS={mode:'jd',jd:'',uploadText:'',uploadName:'',pasteText:'',inM:'upload',region:'Middle East',tmpl:'ats',photo:false,result:null};
+
+function renderCV(){
+  const s=cvS;
+  return`
+  <h2 style="color:#d4af37;font-size:18px;margin:0 0 4px;">📄 CV Generator</h2>
+  <p style="color:#64748b;font-size:13px;margin-bottom:16px;">AI-powered ATS optimization for international hotel chains.</p>
+  <div class="mc-grid">
+    <button class="mc ${s.mode==='jd'?'active':''}" onclick="cvS.mode='jd';render()"><div style="font-size:22px;margin-bottom:6px;">📋</div><div style="font-weight:700;font-size:13px;">Job Description Mode</div><div style="font-size:11px;opacity:.75;margin-top:3px;">Paste job posting → AI matches every keyword</div></button>
+    <button class="mc ${s.mode==='up'?'active':''}" onclick="cvS.mode='up';render()"><div style="font-size:22px;margin-bottom:6px;">📤</div><div style="font-weight:700;font-size:13px;">Upload & Rewrite My CV</div><div style="font-size:11px;opacity:.75;margin-top:3px;">Upload old CV → AI rewrites with stronger language</div></button>
+  </div>
+  <div class="card">
+    ${s.mode==='jd'?`<div class="fld"><label>Job Description</label><p class="hint">Paste full job posting. AI extracts every keyword.</p><textarea id="cvJD" rows="6" placeholder="e.g. We are looking for a Sous Chef at Marriott…">${esc(s.jd)}</textarea></div>`:`
+    <div class="pills"><button class="pill ${s.inM==='upload'?'active':''}" onclick="cvS.inM='upload';render()">📎 Upload File</button><button class="pill ${s.inM==='paste'?'active':''}" onclick="cvS.inM='paste';render()">📋 Paste Text</button></div>
+    ${s.inM==='upload'?`
+      <div class="fld"><label>Upload Existing CV</label></div>
+      <div class="uz ${s.uploadName?'has-file':''}" id="cvUZ" onclick="document.getElementById('cvFI').click()">
+        ${s.uploadName?`<div style="font-size:28px;">📄</div><div style="color:#4ade80;font-weight:700;font-size:13px;margin:6px 0 3px;">${esc(s.uploadName)}</div><div style="color:#64748b;font-size:11px;">${s.uploadText.length} chars · Click to replace</div>`:`<div style="font-size:30px;margin-bottom:8px;">⬆️</div><div style="font-weight:600;font-size:13px;margin-bottom:4px;">Drag & drop your CV</div><div style="color:#64748b;font-size:12px;margin-bottom:10px;">.txt · .docx · .pdf · .rtf</div><div style="background:#1e293b;color:#94a3b8;padding:6px 16px;border-radius:20px;font-size:12px;">Browse Files</div>`}
+      </div>
+      <input type="file" id="cvFI" accept=".txt,.doc,.docx,.pdf,.rtf,.md" style="display:none;"/>
+      ${s.uploadText?`<div style="background:#080c12;border-radius:8px;padding:9px 13px;border:1px solid #1e293b;margin-bottom:10px;"><p style="color:#4ade80;font-size:12px;margin:0 0 3px;font-weight:600;">✅ ${esc(s.uploadName)}</p><p style="color:#64748b;font-size:11px;margin:0;font-style:italic;">${esc(s.uploadText.substring(0,110))}…</p></div>`:''}
+      ${alrt('<strong>PDF tip:</strong> If upload fails to extract text, switch to "Paste Text".','info')}
+    `:`<div class="fld"><label>Paste CV Text</label><p class="hint">Open CV → Ctrl+A → Ctrl+C → Paste here.</p><textarea id="cvPaste" rows="7" placeholder="Paste your full CV text here…">${esc(s.pasteText)}</textarea></div>`}
+    `}
+  </div>
+  <div class="card">
+    <div class="g2">
+      <div style="margin-bottom:12px;"><div style="color:#d4af37;font-size:11px;font-weight:700;margin-bottom:7px;text-transform:uppercase;letter-spacing:.9px;">🌍 Target Region</div><div class="pills">${['Middle East','Europe','Canada/AU','Asia Pacific'].map(r=>`<button class="pill ${s.region===r?'active':''}" onclick="cvS.region='${r}';render()">${r}</button>`).join('')}</div></div>
+      <div style="margin-bottom:12px;"><div style="color:#d4af37;font-size:11px;font-weight:700;margin-bottom:7px;text-transform:uppercase;letter-spacing:.9px;">📐 Template</div><div class="pills">${[{id:'ats',l:'ATS Clean ✅'},{id:'minimal',l:'Minimal Pro'},{id:'modern',l:'Modern'}].map(t=>`<button class="pill ${s.tmpl===t.id?'active':''}" onclick="cvS.tmpl='${t.id}';render()">${t.l}</button>`).join('')}</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0a0f1a;border-radius:8px;border:1px solid #1e293b;">
+      <span style="font-size:13px;">📸</span>
+      <div style="flex:1;"><div style="color:#f1f5f9;font-size:13px;font-weight:600;">Photo-Ready CV (Middle East)</div><div style="color:#64748b;font-size:11px;">Adds a photo placeholder section — common for UAE/Gulf hotel applications</div></div>
+      <button onclick="cvS.photo=!cvS.photo;render()" style="width:44px;height:24px;border-radius:12px;border:none;cursor:pointer;background:${s.photo?'#d4af37':'#1e293b'};position:relative;transition:background .2s;">
+        <span style="position:absolute;top:2px;${s.photo?'right:2px':'left:2px'};width:20px;height:20px;border-radius:50%;background:${s.photo?'#0a0a0f':'#94a3b8'};transition:all .2s;display:block;"></span>
+      </button>
+    </div>
+  </div>
+  <div id="cvErr"></div>
+  <button class="btn pri full" id="genCVBtn">⚡ Generate CV Now</button>
+  <div id="cvSpin"></div>
+  <div id="cvRes">${s.result?renderCVResult(s.result):''}</div>
+  ${renderSavedV()}`;
+}
+
+function renderCVResult(r){
+  window._cvText=r.cv_text;
+  return`<div class="fade" style="margin-top:20px;">
+    <div class="card dark gold">
+      <h3 style="color:#d4af37;font-size:14px;margin:0 0 16px;">📊 ATS Compatibility Report</h3>
+      <div class="rings-row">${ring(r.ats_score,'Overall ATS')}${ring(r.keyword_match,'Keywords %')}${ring(r.formatting_score,'Formatting')}${ring(r.skills_score,'Skills Align')}</div>
+      ${r.keywords_found?.length?`<div style="margin-bottom:10px;"><p style="color:#64748b;font-size:10px;margin-bottom:6px;text-transform:uppercase;">🔑 Keywords Matched</p><div class="tag-row">${tags(r.keywords_found,'#4ade80','#052e16','#166534')}</div></div>`:''}
+      ${r.action_verbs_added?.length?`<div style="margin-bottom:10px;"><p style="color:#64748b;font-size:10px;margin-bottom:6px;text-transform:uppercase;">💪 Power Verbs Added</p><div class="tag-row">${tags(r.action_verbs_added,'#60a5fa','#0c1f3a','#1e40af')}</div></div>`:''}
+      ${r.weak_phrases_removed?.length?`<div><p style="color:#64748b;font-size:10px;margin-bottom:6px;text-transform:uppercase;">🗑️ Weak Phrases Removed</p><div class="tag-row">${tags(r.weak_phrases_removed.map(p=>'✗ "'+p+'"'),'#f87171','#1a0505','#7f1d1d')}</div></div>`:''}
+    </div>
+    ${(r.improvements?.length||r.strong_points?.length)?`
+    <div class="card gold" style="background:#0a0c0f;">
+      <h4 style="color:#d4af37;margin:0 0 12px;font-size:13px;">💡 Smart Suggestions</h4>
+      <div class="sg">
+        ${r.strong_points?.length?`<div><p style="color:#4ade80;font-size:10px;font-weight:700;margin-bottom:7px;text-transform:uppercase;">✅ What's Working</p>${r.strong_points.map(s=>`<div style="display:flex;gap:7px;margin-bottom:5px;"><span style="color:#4ade80;flex-shrink:0;">◆</span><p style="color:#86efac;font-size:12px;margin:0;line-height:1.5;">${esc(s)}</p></div>`).join('')}</div>`:''}
+        ${r.improvements?.length?`<div><p style="color:#fbbf24;font-size:10px;font-weight:700;margin-bottom:7px;text-transform:uppercase;">🔧 Improvements</p>${r.improvements.map(s=>`<div style="display:flex;gap:7px;margin-bottom:5px;"><span style="color:#fbbf24;flex-shrink:0;">◆</span><p style="color:#fde68a;font-size:12px;margin:0;line-height:1.5;">${esc(s)}</p></div>`).join('')}</div>`:''}
+      </div>
+    </div>`:''}
+    ${cvS.photo?`<div class="card"><h4 style="color:#d4af37;font-size:13px;margin:0 0 12px;">📸 Photo-Ready Layout</h4>
+      <div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;">
+        <div class="photo-placeholder"><span style="font-size:28px;">📷</span><span style="color:#d4af37;font-size:10px;margin-top:5px;text-align:center;">Photo<br/>3.5×4.5cm</span></div>
+        <div style="flex:1;min-width:180px;"><p style="color:#64748b;font-size:12px;line-height:1.6;margin:0;">A photo placeholder is included in your CV header. For UAE/Gulf applications, use a professional headshot: formal attire, neutral background, recent photo. Many hotel chains in the Middle East request a photo — this layout is ready for it.</p></div>
+      </div></div>`:''}
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+        <h3 style="color:#d4af37;font-size:14px;margin:0;">📝 Your Optimized CV</h3>
+        <div style="display:flex;gap:7px;">
+          <button class="btn ghost sm" onclick="dlFile(window._cvText,'CV_ATS_Optimized.txt')">⬇ Download</button>
+          <button class="btn sec sm" onclick="navigator.clipboard.writeText(window._cvText)">📋 Copy</button>
+        </div>
+      </div>
+      <pre class="cv-pre">${esc(r.cv_text)}</pre>
+    </div>
+    <div class="card">
+      <h4 style="color:#d4af37;font-size:13px;margin:0 0 10px;">💾 Save This Version</h4>
+      <div style="display:flex;gap:8px;">
+        <input id="cvSL" placeholder="e.g. Sous Chef — Dubai — Marriott" style="flex:1;padding:8px 13px;border-radius:8px;background:#0a0f1a;border:1px solid #1e293b;color:#f1f5f9;font-size:13px;outline:none;"/>
+        <button class="btn grn" onclick="saveVer()">💾 Save</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderSavedV(){
+  if(!cvVersions.length)return'';
+  return`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="toggleEl('savedVL')"><h4 style="color:#d4af37;margin:0;font-size:13px;">📚 Saved Versions (${cvVersions.length})</h4><span style="color:#64748b;font-size:12px;">▼</span></div>
+  <div id="savedVL" style="display:none;margin-top:12px;">${cvVersions.map((v,i)=>`<div class="vi"><div><p style="color:#f1f5f9;font-size:13px;margin:0 0 2px;font-weight:600;">${esc(v.label)}</p><p style="color:#64748b;font-size:11px;margin:0;">${v.date} · ATS: ${v.score}</p></div><div style="display:flex;gap:7px;"><button class="btn ghost sm" onclick="loadVer(${i})">Load</button><button class="btn danger sm" onclick="delVer(${i})">Del</button></div></div>`).join('')}</div></div>`;
+}
+
+function saveVer(){if(!cvS.result)return;const l=(document.getElementById('cvSL')?.value||'').trim()||`${profile.title||'CV'} — ${cvS.region} — ${new Date().toLocaleDateString()}`;cvVersions.unshift({label:l,date:new Date().toLocaleDateString(),score:cvS.result.ats_score,cv_text:cvS.result.cv_text,result:cvS.result});if(cvVersions.length>10)cvVersions.length=10;store.cvVersions=cvVersions;sv(store);render();}
+function loadVer(i){cvS.result=cvVersions[i].result;window._cvText=cvVersions[i].cv_text;render();}
+function delVer(i){cvVersions.splice(i,1);store.cvVersions=cvVersions;sv(store);render();}
+function toggleEl(id){const e=document.getElementById(id);if(e)e.style.display=e.style.display==='none'?'block':'none';}
+
+// ══════════════════════════════════════
+// COVER LETTER
+// ══════════════════════════════════════
+let clS={jd:'',company:'',manager:'',length:'standard',result:null};
+function renderCover(){
+  const s=clS;
+  return`
+  <h2 style="color:#d4af37;font-size:18px;margin:0 0 4px;">✉️ Cover Letter Generator</h2>
+  <p style="color:#64748b;font-size:13px;margin-bottom:16px;">Human-written tone. Keyword-matched. Tailored to each hotel's culture.</p>
+  <div class="card">
+    <div class="g2">
+      <div class="fld"><label>Target Company</label><input id="clCo" value="${esc(s.company)}" placeholder="e.g. Burj Al Arab · Jumeirah"/></div>
+      <div class="fld"><label>Hiring Manager (optional)</label><input id="clMgr" value="${esc(s.manager)}" placeholder="Mr. Ahmed Al Rashid"/></div>
+    </div>
+    <div class="fld"><label>Job Description</label><p class="hint">Paste job posting for keyword-matched letter.</p><textarea id="clJD" rows="5" placeholder="Paste job description…">${esc(s.jd)}</textarea></div>
+    <div style="color:#d4af37;font-size:11px;font-weight:700;margin-bottom:8px;text-transform:uppercase;letter-spacing:.9px;">Length</div>
+    <div class="g3" style="margin-bottom:4px;">${[{id:'short',l:'Short',s:'~150 words',n:'Follow-ups'},{id:'standard',l:'Standard',s:'~250 words',n:'Most effective ✅'},{id:'detailed',l:'Detailed',s:'~400 words',n:'Senior roles'}].map(l=>`<button onclick="clS.length='${l.id}';render()" style="padding:10px 8px;border-radius:10px;border:2px solid ${s.length===l.id?'#d4af37':'#1e293b'};background:${s.length===l.id?'#1a1505':'#080c12'};color:${s.length===l.id?'#d4af37':'#64748b'};cursor:pointer;font-family:inherit;text-align:center;"><div style="font-weight:700;font-size:13px;">${l.l}</div><div style="font-size:10.5px;opacity:.8;">${l.s}</div><div style="font-size:10px;opacity:.6;">${l.n}</div></button>`).join('')}
+    </div>
+  </div>
+  <div id="clErr"></div>
+  <button class="btn pri full" id="genCLBtn">✍️ Generate Cover Letter</button>
+  <div id="clSpin"></div>
+  <div id="clRes">${s.result?renderCLResult(s.result):''}</div>`;
+}
+function renderCLResult(r){
+  window._clText=r.cover_letter;
+  return`<div class="fade" style="margin-top:20px;">
+    ${r.tone_notes?alrt(`<strong>Tone adapted:</strong> ${esc(r.tone_notes)}`,'info'):''}
+    ${r.keywords_included?.length?`<div class="card"><p style="color:#64748b;font-size:10px;margin:0 0 7px;text-transform:uppercase;">Keywords Woven In</p><div class="tag-row">${tags(r.keywords_included,'#4ade80','#052e16','#166534')}</div></div>`:''}
+    <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;"><h3 style="color:#d4af37;font-size:14px;margin:0;">Your Cover Letter</h3><div style="display:flex;gap:7px;"><button class="btn ghost sm" onclick="dlFile(window._clText,'Cover_Letter.txt')">⬇ Download</button><button class="btn sec sm" onclick="navigator.clipboard.writeText(window._clText)">📋 Copy</button></div></div><pre class="cl-pre">${esc(r.cover_letter)}</pre></div>
+  </div>`;
+}
+
+// ══════════════════════════════════════
+// ANALYZE JD
+// ══════════════════════════════════════
+let ajS={jd:'',result:null};
+function renderAnalyze(){
+  return`
+  <h2 style="color:#d4af37;font-size:18px;margin:0 0 4px;">🔍 JD Analyzer</h2>
+  <p style="color:#64748b;font-size:13px;margin-bottom:16px;">Deep-scan any job posting — ATS keywords, match score, interview tips.</p>
+  <div class="card"><div class="fld"><label>Paste Job Description</label><textarea id="ajJD" rows="7" placeholder="Paste complete job description here…">${esc(ajS.jd)}</textarea></div></div>
+  <div id="ajErr"></div>
+  <button class="btn pri full" id="ajBtn">🔬 Analyze Job Posting</button>
+  <div id="ajSpin"></div>
+  <div id="ajRes">${ajS.result?renderAJResult(ajS.result):''}</div>`;
+}
+function renderAJResult(r){
+  return`<div class="fade" style="margin-top:20px;">
+    <div class="card dark gold"><div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;">
+      <div style="flex:1;"><h3 style="color:#f1f5f9;font-size:16px;margin:0 0 3px;">${esc(r.role||'')}</h3><p style="color:#94a3b8;font-size:12px;margin:0 0 8px;">${esc(r.hotel_chain||'')}</p>
+        <div class="tag-row">${r.ats_software?`<span class="tag" style="color:#a5b4fc;background:#1e1b4b;border:1px solid #4338ca;">ATS: ${esc(r.ats_software)}</span>`:''}${r.experience_required?`<span class="tag" style="color:#d4af37;background:#1a1505;border:1px solid #b8860b;">Exp: ${esc(r.experience_required)}</span>`:''}</div>
+      </div>${ring(r.match_score,'Your Match',85)}
+    </div>${r.fit_summary?`<div style="background:#0a0f1a;border-radius:8px;padding:10px 14px;margin-top:12px;border:1px solid #1e293b;"><p style="color:#cbd5e1;font-size:12.5px;margin:0;line-height:1.6;">💬 ${esc(r.fit_summary)}</p></div>`:''}</div>
+    <div class="g2g">
+      <div class="card"><p style="color:#4ade80;font-weight:700;font-size:10px;margin-bottom:8px;text-transform:uppercase;">✅ Must-Have</p><div class="tag-row">${tags(r.must_have_skills,'#4ade80','#052e16','#166534')}</div></div>
+      <div class="card"><p style="color:#60a5fa;font-weight:700;font-size:10px;margin-bottom:8px;text-transform:uppercase;">💡 Nice to Have</p><div class="tag-row">${tags(r.nice_to_have,'#60a5fa','#0c1f3a','#1e40af')}</div></div>
+      <div class="card"><p style="color:#d4af37;font-weight:700;font-size:10px;margin-bottom:8px;text-transform:uppercase;">🔑 ATS Keywords</p><div class="tag-row">${tags(r.keywords,'#d4af37','#1a1505','#b8860b')}</div></div>
+      <div class="card"><p style="color:#f87171;font-weight:700;font-size:10px;margin-bottom:8px;text-transform:uppercase;">⚠️ Profile Gaps</p><div class="tag-row">${tags(r.red_flags,'#f87171','#1a0505','#7f1d1d')}</div></div>
+    </div>
+    ${r.interview_tips?.length?`<div class="card"><p style="color:#fbbf24;font-weight:700;font-size:10px;margin-bottom:10px;text-transform:uppercase;">🎯 Interview Tips</p>${r.interview_tips.map((t,i)=>`<div style="display:flex;gap:9px;margin-bottom:7px;"><span style="color:#d4af37;font-weight:800;flex-shrink:0;">${i+1}.</span><p style="color:#fde68a;font-size:12.5px;margin:0;line-height:1.5;">${esc(t)}</p></div>`).join('')}</div>`:''}
+  </div>`;
+}
+
+// ══════════════════════════════════════
+// HEALTH CHECK
+// ══════════════════════════════════════
+let hhS={inM:'upload',uploadText:'',uploadName:'',pasteText:'',result:null};
+function renderHealth(){
+  const s=hhS;
+  return`
+  <h2 style="color:#d4af37;font-size:18px;margin:0 0 4px;">🩺 CV Health Checker</h2>
+  <p style="color:#64748b;font-size:13px;margin-bottom:16px;">Upload any CV — instant diagnosis: weak phrases, ATS pass rate, quick fixes.</p>
+  <div class="card">
+    <div class="pills"><button class="pill ${s.inM==='upload'?'active':''}" onclick="hhS.inM='upload';render()">📎 Upload</button><button class="pill ${s.inM==='paste'?'active':''}" onclick="hhS.inM='paste';render()">📋 Paste</button></div>
+    ${s.inM==='upload'?`<div class="uz ${s.uploadName?'has-file':''}" id="hhUZ" onclick="document.getElementById('hhFI').click()">${s.uploadName?`<div style="font-size:26px;">📄</div><div style="color:#4ade80;font-weight:700;font-size:13px;">${esc(s.uploadName)}</div><div style="color:#64748b;font-size:11px;">${s.uploadText.length} chars · Click to replace</div>`:`<div style="font-size:28px;margin-bottom:8px;">⬆️</div><div style="font-weight:600;font-size:13px;margin-bottom:4px;">Drag & drop your CV</div><div style="color:#64748b;font-size:12px;margin-bottom:10px;">.txt · .docx · .pdf · .rtf</div><div style="background:#1e293b;color:#94a3b8;padding:6px 16px;border-radius:20px;font-size:12px;">Browse Files</div>`}</div>
+      <input type="file" id="hhFI" accept=".txt,.doc,.docx,.pdf,.rtf,.md" style="display:none;"/>
+      ${s.uploadText?alrt(`✅ ${esc(s.uploadName)} — ${s.uploadText.length} characters extracted`,'ok'):''}
+      ${alrt('<strong>PDF tip:</strong> If upload fails, switch to Paste Text.','info')}`
+    :`<div class="fld"><label>Paste CV Text</label><textarea id="hhPaste" rows="8" placeholder="Paste your CV text here…">${esc(s.pasteText)}</textarea></div>`}
+  </div>
+  <div id="hhErr"></div>
+  <button class="btn pri full" id="hhBtn">🩺 Run Health Check</button>
+  <div id="hhSpin"></div>
+  <div id="hhRes">${s.result?renderHHResult(s.result):''}</div>`;
+}
+function renderHHResult(r){
+  return`<div class="fade" style="margin-top:20px;">
+    <div class="card dark gold"><div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;margin-bottom:14px;"><div style="flex:1;"><h3 style="color:#d4af37;font-size:14px;margin:0 0 7px;">Diagnosis Results</h3>${r.verdict?`<p style="color:#cbd5e1;font-size:12.5px;line-height:1.6;margin:0;">${esc(r.verdict)}</p>`:''}</div><div style="display:flex;gap:12px;flex-wrap:wrap;">${ring(r.overall_score,'CV Score',76)}${ring(r.estimated_ats_pass_rate,'ATS Pass %',76)}</div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div style="background:#052e16;border:1px solid #166534;border-radius:8px;padding:10px 13px;"><p style="color:#4ade80;font-size:10px;font-weight:700;margin:0 0 7px;text-transform:uppercase;">✅ Sections Found</p>${(r.sections_found||[]).map(s=>`<p style="color:#86efac;font-size:11.5px;margin:0 0 2px;">• ${esc(s)}</p>`).join('')}</div>
+        <div style="background:#1a0505;border:1px solid #7f1d1d;border-radius:8px;padding:10px 13px;"><p style="color:#f87171;font-size:10px;font-weight:700;margin:0 0 7px;text-transform:uppercase;">❌ Sections Missing</p>${(r.sections_missing||[]).map(s=>`<p style="color:#fca5a5;font-size:11.5px;margin:0 0 2px;">• ${esc(s)}</p>`).join('')}</div>
+      </div>
+    </div>
+    <div class="g2g">
+      ${r.weak_phrases?.length?`<div class="card"><p style="color:#f87171;font-weight:700;font-size:10px;margin-bottom:8px;text-transform:uppercase;">🗑️ Weak Phrases</p>${r.weak_phrases.map(p=>`<div style="background:#1a0505;border:1px solid #7f1d1d;border-radius:6px;padding:4px 9px;margin-bottom:4px;color:#f87171;font-size:12px;">✗ "${esc(p)}"</div>`).join('')}</div>`:''}
+      ${r.formatting_issues?.length?`<div class="card"><p style="color:#fbbf24;font-weight:700;font-size:10px;margin-bottom:8px;text-transform:uppercase;">📐 Formatting Issues</p>${r.formatting_issues.map(f=>`<p style="color:#fde68a;font-size:12px;margin:0 0 5px;line-height:1.5;">⚠️ ${esc(f)}</p>`).join('')}</div>`:''}
+    </div>
+    ${r.industry_keywords_missing?.length?`<div class="card"><p style="color:#d4af37;font-weight:700;font-size:10px;margin-bottom:8px;text-transform:uppercase;">🔑 Missing Keywords</p><div class="tag-row">${tags(r.industry_keywords_missing,'#d4af37','#1a1505','#b8860b')}</div></div>`:''}
+    <div class="card"><div class="sg">
+      ${r.critical_fixes?.length?`<div><p style="color:#f87171;font-weight:700;font-size:10px;margin-bottom:8px;text-transform:uppercase;">🚨 Critical Fixes</p>${r.critical_fixes.map(f=>`<div style="display:flex;gap:7px;margin-bottom:5px;"><span style="color:#f87171;flex-shrink:0;font-weight:700;">!</span><p style="color:#fca5a5;font-size:12px;margin:0;line-height:1.5;">${esc(f)}</p></div>`).join('')}</div>`:''}
+      ${r.quick_wins?.length?`<div><p style="color:#4ade80;font-weight:700;font-size:10px;margin-bottom:8px;text-transform:uppercase;">⚡ Quick Wins</p>${r.quick_wins.map(w=>`<div style="display:flex;gap:7px;margin-bottom:5px;"><span style="color:#4ade80;flex-shrink:0;font-weight:700;">+</span><p style="color:#86efac;font-size:12px;margin:0;line-height:1.5;">${esc(w)}</p></div>`).join('')}</div>`:''}
+    </div></div>
+    ${alrt('Ready to fix these? Go to <strong>Generate CV</strong> → Upload CV → AI fixes everything automatically.','info')}
+  </div>`;
+}
+
+// ══════════════════════════════════════
+// CV COMPARE (NEW)
+// ══════════════════════════════════════
+let cmpS={jds:['','',''],result:null};
+function renderCompare(){
+  const s=cmpS;
+  return`
+  <h2 style="color:#d4af37;font-size:18px;margin:0 0 4px;">📊 CV Comparison Tool</h2>
+  <p style="color:#64748b;font-size:13px;margin-bottom:16px;">Paste up to 3 job postings — AI tells you which one you match best and why.</p>
+  <div class="card">
+    <p style="color:#64748b;font-size:12px;margin-bottom:14px;">Paste job descriptions below. You can compare 2 or 3 at once.</p>
+    ${[0,1,2].map(i=>`<div class="fld"><label>Job Description ${i+1}${i===0?' (Required)':' (Optional)'}</label><textarea id="jd${i}" rows="4" placeholder="${i===0?'Paste first job posting here…':i===1?'Paste second job posting here (optional)…':'Paste third job posting (optional)…'}">${esc(s.jds[i])}</textarea></div>`).join('')}
+  </div>
+  <div id="cmpErr"></div>
+  <button class="btn pri full" id="cmpBtn">📊 Compare My Fit Across Jobs</button>
+  <div id="cmpSpin"></div>
+  <div id="cmpRes">${s.result?renderCmpResult(s.result):''}</div>`;
+}
+function renderCmpResult(r){
+  const cols=r.jobs||[];
+  const best=cols.reduce((a,b)=>b.match_score>a.match_score?b:a,cols[0]);
+  return`<div class="fade" style="margin-top:20px;">
+    <div class="card dark gold" style="margin-bottom:14px;">
+      <h3 style="color:#d4af37;font-size:14px;margin:0 0 6px;">🏆 Best Match: ${esc(best.role||'Job '+cols.indexOf(best)+1)}</h3>
+      <p style="color:#94a3b8;font-size:12.5px;margin:0 0 10px;">${esc(best.company||'')}</p>
+      <p style="color:#cbd5e1;font-size:12.5px;line-height:1.6;margin:0;">${esc(r.recommendation||'')}</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(${cols.length},1fr);gap:12px;margin-bottom:14px;">
+      ${cols.map((j,i)=>`<div class="cmp-col ${j===best?'best':''}">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+          <div><div style="font-weight:700;font-size:13px;color:${j===best?'#4ade80':'#f1f5f9'};">${j===best?'🏆 ':''}${esc(j.role||'Job '+(i+1))}</div><div style="font-size:11px;color:#64748b;margin-top:2px;">${esc(j.company||'')}</div></div>
+          ${ring(j.match_score,'Match',66)}
+        </div>
+        <div style="margin-bottom:8px;"><p style="color:#64748b;font-size:10px;margin-bottom:5px;text-transform:uppercase;">✅ Strengths</p>${(j.strengths||[]).map(s=>`<p style="color:#86efac;font-size:11px;margin:0 0 3px;">• ${esc(s)}</p>`).join('')}</div>
+        <div><p style="color:#64748b;font-size:10px;margin-bottom:5px;text-transform:uppercase;">⚠️ Gaps</p>${(j.gaps||[]).map(g=>`<p style="color:#fca5a5;font-size:11px;margin:0 0 3px;">• ${esc(g)}</p>`).join('')}</div>
+        ${j.salary_range?`<div style="margin-top:8px;padding:6px 10px;background:#0a0f1a;border-radius:6px;"><p style="color:#d4af37;font-size:11px;margin:0;">💰 ${esc(j.salary_range)}</p></div>`:''}
+      </div>`).join('')}
+    </div>
+    ${alrt('Go to <strong>Generate CV</strong> → Job Description Mode → paste your best-match job to get a perfectly tailored CV.','info')}
+  </div>`;
+}
+
+// ══════════════════════════════════════
+// MULTI-LANGUAGE CV (NEW)
+// ══════════════════════════════════════
+let mlS={lang:'Arabic',result:null};
+const LANGS=['Arabic','French','German','Spanish','Italian','Mandarin Chinese','Japanese','Portuguese','Russian','Turkish'];
+function renderMulti(){
+  const s=mlS;
+  return`
+  <h2 style="color:#d4af37;font-size:18px;margin:0 0 4px;">🌍 Multi-Language CV Generator</h2>
+  <p style="color:#64748b;font-size:13px;margin-bottom:16px;">Generate your full CV in any language — tailored for local hotel markets.</p>
+  <div class="card">
+    <div style="color:#d4af37;font-size:11px;font-weight:700;margin-bottom:10px;text-transform:uppercase;letter-spacing:.9px;">Select Target Language</div>
+    <div class="lg-grid">${LANGS.map(l=>`<button class="lg-card ${s.lang===l?'active':''}" onclick="mlS.lang='${l}';render()"><div style="font-size:18px;margin-bottom:4px;">${langFlag(l)}</div><div style="font-size:12px;font-weight:600;">${l}</div></button>`).join('')}</div>
+    <div style="margin-top:14px;padding:12px 14px;background:#0a0f1a;border-radius:8px;border:1px solid #1e293b;">
+      <p style="color:#94a3b8;font-size:12px;margin:0;line-height:1.6;">
+        ${langTip(s.lang)}
+      </p>
+    </div>
+  </div>
+  <div id="mlErr"></div>
+  <button class="btn pri full" id="mlBtn">🌍 Generate CV in ${s.lang}</button>
+  <div id="mlSpin"></div>
+  <div id="mlRes">${s.result?renderMLResult(s.result):''}</div>`;
+}
+function langFlag(l){const m={Arabic:'🇦🇪',French:'🇫🇷',German:'🇩🇪',Spanish:'🇪🇸',Italian:'🇮🇹','Mandarin Chinese':'🇨🇳',Japanese:'🇯🇵',Portuguese:'🇧🇷',Russian:'🇷🇺',Turkish:'🇹🇷'};return m[l]||'🌐';}
+function langTip(l){const m={Arabic:'Arabic CVs for Gulf/UAE hotels: 1 page preferred. Often include nationality and religion field. Right-to-left text. Marriott Arabia, Jumeirah, and Rotana commonly accept Arabic CVs.',French:'French CVs for Accor, Sofitel, Novotel properties: 1 page, no photo required. Include "Compétences" section. Professional tone is more formal than English.',German:'German CVs: Very detailed, 2 pages expected. Include photo, date of birth, Ausbildung certificates. Major brands: Kempinski, Steigenberger, Marriott Germany.',Spanish:'Spanish CVs for Meliá, NH Hotels, Barceló: Include DNI reference style, clear structure. 1-2 pages standard.',Italian:'Italian CVs (CV Europeo format preferred): Include photo, personal details. Forte dei Marmi, LVMH properties, and international chains common targets.'};return m[l]||`A professionally translated CV in ${l}, adapted for local hotel industry standards and cultural norms.`;}
+function renderMLResult(r){
+  window._mlText=r.cv_translated;
+  return`<div class="fade" style="margin-top:20px;">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+        <h3 style="color:#d4af37;font-size:14px;margin:0;">Your CV in ${esc(mlS.lang)} ${langFlag(mlS.lang)}</h3>
+        <div style="display:flex;gap:7px;">
+          <button class="btn ghost sm" onclick="dlFile(window._mlText,'CV_${mlS.lang}.txt')">⬇ Download</button>
+          <button class="btn sec sm" onclick="navigator.clipboard.writeText(window._mlText)">📋 Copy</button>
+        </div>
+      </div>
+      ${r.cultural_notes?`<div style="background:#0a0f1a;border-radius:8px;padding:10px 14px;margin-bottom:12px;border:1px solid #1e293b;"><p style="color:#60a5fa;font-size:12px;margin:0;line-height:1.6;">🌍 <strong>Cultural notes:</strong> ${esc(r.cultural_notes)}</p></div>`:''}
+      <pre class="cv-pre" style="${mlS.lang==='Arabic'?'direction:rtl;text-align:right;':''}">${esc(r.cv_translated)}</pre>
+    </div>
+    ${alrt('Always have a native speaker review a translated CV before sending. The AI translation is professional but local nuance matters.','warn')}
+  </div>`;
+}
+
+// ══════════════════════════════════════
+// SALARY GUIDE (NEW)
+// ══════════════════════════════════════
+let salS={role:'',region:'Middle East',exp:'',result:null};
+function renderSalary(){
+  const s=salS;
+  return`
+  <h2 style="color:#d4af37;font-size:18px;margin:0 0 4px;">💰 Salary Negotiation Guide</h2>
+  <p style="color:#64748b;font-size:13px;margin-bottom:16px;">Get realistic salary ranges, negotiation tactics, and what top hotel chains actually pay.</p>
+  <div class="card">
+    <div class="g2">
+      <div class="fld"><label>Job Title / Role</label><input id="salRole" value="${esc(s.role||profile.title||'')}" placeholder="e.g. Sous Chef, Executive Chef, F&B Manager"/></div>
+      <div class="fld"><label>Years of Experience</label><input id="salExp" value="${esc(s.exp)}" placeholder="e.g. 5 years, 8+ years"/></div>
+    </div>
+    <div class="fld"><label>Target Region</label><div class="pills">${['Middle East','Europe','Canada/Australia','Asia Pacific','USA'].map(r=>`<button class="pill ${s.region===r?'active':''}" onclick="salS.region='${r}';render()">${r}</button>`).join('')}</div></div>
+  </div>
+  <div id="salErr"></div>
+  <button class="btn pri full" id="salBtn">💰 Get Salary Guide</button>
+  <div id="salSpin"></div>
+  <div id="salRes">${s.result?renderSalResult(s.result):''}</div>`;
+}
+function renderSalResult(r){
+  return`<div class="fade" style="margin-top:20px;">
+    <div class="card dark gold">
+      <h3 style="color:#d4af37;font-size:14px;margin:0 0 4px;">${esc(r.role||'')} — ${esc(r.region||'')}</h3>
+      <p style="color:#64748b;font-size:12px;margin:0 0 16px;">${esc(r.market_context||'')}</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;">
+        ${[{l:'Entry Range',v:r.entry_range,c:'#f87171'},{l:'Mid Range',v:r.mid_range,c:'#fbbf24'},{l:'Senior Range',v:r.senior_range,c:'#4ade80'}].map(x=>`<div style="background:#0a0f1a;border-radius:8px;padding:12px;border:1px solid #1e293b;text-align:center;"><div style="color:#64748b;font-size:10px;text-transform:uppercase;margin-bottom:5px;">${x.l}</div><div style="color:${x.c};font-size:15px;font-weight:800;">${esc(x.v||'N/A')}</div></div>`).join('')}
+      </div>
+      ${r.your_estimated?`<div style="background:#1a1505;border:1px solid #b8860b;border-radius:8px;padding:12px 14px;margin-bottom:14px;"><p style="color:#d4af37;font-size:13px;font-weight:700;margin:0 0 3px;">Your Estimated Range (based on your profile)</p><p style="color:#f5c842;font-size:18px;font-weight:900;margin:0;">${esc(r.your_estimated)}</p></div>`:''}
+      <div class="sal-bar"><div class="sal-fill" style="width:${r.market_position||60}%;"></div></div>
+      <p style="color:#64748b;font-size:11px;margin:4px 0 0;">Market position: ${r.market_position||60}th percentile for your experience level</p>
+    </div>
+    ${r.benefits?.length?`<div class="card"><p style="color:#d4af37;font-weight:700;font-size:11px;margin-bottom:10px;text-transform:uppercase;">🎁 Common Benefits to Negotiate</p><div class="tag-row">${tags(r.benefits,'#c084fc','#1a0a2e','#6b21a8')}</div></div>`:''}
+    ${r.negotiation_tips?.length?`<div class="card"><p style="color:#fbbf24;font-weight:700;font-size:11px;margin-bottom:10px;text-transform:uppercase;">🎯 Negotiation Tactics</p>${r.negotiation_tips.map((t,i)=>`<div style="display:flex;gap:9px;margin-bottom:8px;"><span style="color:#d4af37;font-weight:800;flex-shrink:0;">${i+1}.</span><p style="color:#fde68a;font-size:12.5px;margin:0;line-height:1.5;">${esc(t)}</p></div>`).join('')}</div>`:''}
+    ${r.what_to_say?`<div class="card"><p style="color:#4ade80;font-weight:700;font-size:11px;margin-bottom:10px;text-transform:uppercase;">💬 What to Say in the Interview</p><div style="background:#0a0f1a;border-radius:8px;padding:12px 14px;border-left:3px solid #4ade80;"><p style="color:#86efac;font-size:13px;font-style:italic;margin:0;line-height:1.7;">"${esc(r.what_to_say)}"</p></div></div>`:''}
+    ${r.hotel_chain_rates?.length?`<div class="card"><p style="color:#60a5fa;font-weight:700;font-size:11px;margin-bottom:10px;text-transform:uppercase;">🏨 What Top Chains Pay</p>${r.hotel_chain_rates.map(h=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 12px;background:#0a0f1a;border-radius:7px;margin-bottom:5px;"><span style="color:#f1f5f9;font-size:12.5px;">${esc(h.chain)}</span><span style="color:#60a5fa;font-size:12.5px;font-weight:700;">${esc(h.range)}</span></div>`).join('')}</div>`:''}
+  </div>`;
+}
+
+// ══════════════════════════════════════
+// JOB TRACKER (NEW)
+// ══════════════════════════════════════
+const statusConfig={Applied:{col:'#60a5fa',bg:'#0c1f3a',bdr:'#1e40af'},Interview:{col:'#fbbf24',bg:'#1c1000',bdr:'#78350f'},Offer:{col:'#4ade80',bg:'#052e16',bdr:'#166534'},Rejected:{col:'#f87171',bg:'#1a0505',bdr:'#7f1d1d'},'Follow-up':{col:'#c084fc',bg:'#1a0a2e',bdr:'#6b21a8'}};
+
+function renderTracker(){
+  return`
+  <h2 style="color:#d4af37;font-size:18px;margin:0 0 4px;">📧 Job Application Tracker</h2>
+  <p style="color:#64748b;font-size:13px;margin-bottom:16px;">Track every hotel you've applied to — status, CV version used, follow-up dates.</p>
+  <div class="card">
+    <h4 style="color:#d4af37;font-size:12px;margin:0 0 12px;text-transform:uppercase;letter-spacing:.9px;">➕ Add New Application</h4>
+    <div class="g2">
+      <div class="fld"><label>Hotel / Company</label><input id="trkHotel" placeholder="e.g. Marriott Downtown Dubai"/></div>
+      <div class="fld"><label>Position Applied For</label><input id="trkRole" placeholder="e.g. Sous Chef"/></div>
+      <div class="fld"><label>Date Applied</label><input id="trkDate" type="date" value="${new Date().toISOString().split('T')[0]}"/></div>
+      <div class="fld"><label>Status</label><select id="trkStatus"><option>Applied</option><option>Interview</option><option>Offer</option><option>Rejected</option><option>Follow-up</option></select></div>
+    </div>
+    <div class="fld"><label>Notes</label><input id="trkNotes" placeholder="e.g. Sent via HR email, used Marriott CV v2, follow up on 15th…"/></div>
+    <button class="btn pri" id="addTrkBtn">➕ Add Application</button>
+  </div>
+  ${jobTracker.length?`
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+      <h4 style="color:#d4af37;font-size:13px;margin:0;">📋 Your Applications (${jobTracker.length})</h4>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">${Object.entries(statusConfig).map(([s,c])=>`<span class="tag" style="color:${c.col};background:${c.bg};border:1px solid ${c.bdr};">${s}: ${jobTracker.filter(j=>j.status===s).length}</span>`).join('')}</div>
+    </div>
+    <div>${jobTracker.map((j,i)=>{const sc=statusConfig[j.status]||statusConfig.Applied;return`<div class="vi">
+      <div style="flex:1;min-width:140px;"><p style="color:#f1f5f9;font-size:13px;margin:0 0 2px;font-weight:600;">${esc(j.hotel)}</p><p style="color:#64748b;font-size:11px;margin:0;">${esc(j.role)} · ${esc(j.date)}</p>${j.notes?`<p style="color:#475569;font-size:11px;margin:3px 0 0;font-style:italic;">${esc(j.notes)}</p>`:''}</div>
+      <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;">
+        <select onchange="updateTrkStatus(${i},this.value)" style="padding:4px 9px;border-radius:20px;border:1px solid ${sc.bdr};background:${sc.bg};color:${sc.col};font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">
+          ${Object.keys(statusConfig).map(s=>`<option ${j.status===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+        <button class="btn danger sm" onclick="delTrk(${i})">✕</button>
+      </div>
+    </div>`}).join('')}</div>
+  </div>
+  <div class="card">
+    <h4 style="color:#d4af37;font-size:12px;margin:0 0 10px;text-transform:uppercase;">📈 Pipeline Summary</h4>
+    <div class="g3">${Object.entries(statusConfig).map(([s,c])=>`<div style="background:${c.bg};border:1px solid ${c.bdr};border-radius:8px;padding:10px;text-align:center;"><div style="font-size:22px;font-weight:900;color:${c.col};">${jobTracker.filter(j=>j.status===s).length}</div><div style="font-size:11px;color:${c.col};margin-top:2px;">${s}</div></div>`).join('')}</div>
+  </div>`:'<div class="card" style="text-align:center;padding:32px 16px;"><div style="font-size:40px;margin-bottom:10px;">📋</div><p style="color:#64748b;font-size:13px;">No applications yet. Add your first one above!</p></div>'}`;
+}
+
+// ══════════════════════════════════════
+// REFERENCE LETTER (NEW)
+// ══════════════════════════════════════
+let refS={type:'reference_letter',refName:'',refTitle:'',refCompany:'',refRelation:'',candidateRole:'',result:null};
+function renderReference(){
+  const s=refS;
+  return`
+  <h2 style="color:#d4af37;font-size:18px;margin:0 0 4px;">📝 Reference Letter Generator</h2>
+  <p style="color:#64748b;font-size:13px;margin-bottom:16px;">Generate professional reference letters or polite reference request emails.</p>
+  <div class="card">
+    <div class="mc-grid">
+      <button class="mc ${s.type==='reference_letter'?'active':''}" onclick="refS.type='reference_letter';render()"><div style="font-size:22px;margin-bottom:6px;">📄</div><div style="font-weight:700;font-size:13px;">Reference Letter</div><div style="font-size:11px;opacity:.75;margin-top:3px;">Full letter from manager/employer to hiring team</div></button>
+      <button class="mc ${s.type==='request_email'?'active':''}" onclick="refS.type='request_email';render()"><div style="font-size:22px;margin-bottom:6px;">📧</div><div style="font-weight:700;font-size:13px;">Reference Request Email</div><div style="font-size:11px;opacity:.75;margin-top:3px;">Polite email asking your manager to write a reference</div></button>
+    </div>
+    ${s.type==='reference_letter'?`
+    <h4 style="color:#d4af37;font-size:11px;margin:0 0 12px;text-transform:uppercase;letter-spacing:.9px;">Reference Writer Details</h4>
+    <div class="g2">
+      <div class="fld"><label>Reference Writer's Name</label><input id="refName" value="${esc(s.refName)}" placeholder="e.g. Chef Michel Dupont"/></div>
+      <div class="fld"><label>Their Title</label><input id="refTitle" value="${esc(s.refTitle)}" placeholder="e.g. Executive Chef / F&B Director"/></div>
+      <div class="fld"><label>Their Hotel / Company</label><input id="refCompany" value="${esc(s.refCompany)}" placeholder="e.g. Marriott Downtown Dubai"/></div>
+      <div class="fld"><label>Their Relation to You</label><input id="refRelation" value="${esc(s.refRelation)}" placeholder="e.g. Direct supervisor for 3 years"/></div>
+    </div>
+    <div class="fld"><label>Role You're Applying For</label><input id="refCandRole" value="${esc(s.candidateRole||profile.title||'')}" placeholder="e.g. Sous Chef at Hilton Dubai"/></div>`:`
+    <h4 style="color:#d4af37;font-size:11px;margin:0 0 12px;text-transform:uppercase;letter-spacing:.9px;">Your Manager's Details</h4>
+    <div class="g2">
+      <div class="fld"><label>Manager's Name</label><input id="refName" value="${esc(s.refName)}" placeholder="e.g. Chef Michel Dupont"/></div>
+      <div class="fld"><label>Manager's Title</label><input id="refTitle" value="${esc(s.refTitle)}" placeholder="e.g. Executive Chef"/></div>
+    </div>
+    <div class="fld"><label>Role You're Requesting Reference For</label><input id="refCandRole" value="${esc(s.candidateRole||profile.title||'')}" placeholder="e.g. Sous Chef position at Hilton Dubai"/></div>`}
+  </div>
+  <div id="refErr"></div>
+  <button class="btn pri full" id="refBtn">📝 Generate ${s.type==='reference_letter'?'Reference Letter':'Request Email'}</button>
+  <div id="refSpin"></div>
+  <div id="refRes">${s.result?renderRefResult(s.result):''}</div>`;
+}
+function renderRefResult(r){
+  window._refText=r.letter||r.email;
+  const title=refS.type==='reference_letter'?'Reference Letter':'Reference Request Email';
+  return`<div class="fade" style="margin-top:20px;">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+        <h3 style="color:#d4af37;font-size:14px;margin:0;">📄 Your ${title}</h3>
+        <div style="display:flex;gap:7px;">
+          <button class="btn ghost sm" onclick="dlFile(window._refText,'${title.replace(/ /g,'_')}.txt')">⬇ Download</button>
+          <button class="btn sec sm" onclick="navigator.clipboard.writeText(window._refText)">📋 Copy</button>
+        </div>
+      </div>
+      ${r.tips?`<div style="background:#0a0f1a;border-radius:8px;padding:10px 14px;margin-bottom:12px;border:1px solid #1e293b;"><p style="color:#fbbf24;font-size:12px;margin:0;line-height:1.5;">💡 ${esc(r.tips)}</p></div>`:''}
+      <pre class="cl-pre">${esc(r.letter||r.email||'')}</pre>
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════
+// BIND EVENTS
+// ══════════════════════════════════════
+function bindTab(){
+  const t=activeTab;
+  if(t==='profile')bindProfile();
+  else if(t==='cv')bindCV();
+  else if(t==='cover')bindCover();
+  else if(t==='analyze')bindAnalyze();
+  else if(t==='health')bindHealth();
+  else if(t==='compare')bindCompare();
+  else if(t==='multi')bindMulti();
+  else if(t==='salary')bindSalary();
+  else if(t==='tracker')bindTracker();
+  else if(t==='reference')bindReference();
+}
+
+function bindProfile(){
+  document.getElementById('saveProfBtn').onclick=()=>{
+    profile={name:v('pName'),title:v('pTitle'),email:v('pEmail'),phone:v('pPhone'),location:v('pLocation'),linkedin:v('pLinkedin'),summary:v('pSummary'),experience:v('pExperience'),education:v('pEducation'),skills:v('pSkills'),languages:v('pLanguages'),awards:v('pAwards')};
+    store.profile=profile;sv(store);
+    document.getElementById('pSaveMsg').innerHTML=alrt('Profile saved! All features use your updated data.','ok');
+    setTimeout(()=>{const e=document.getElementById('pSaveMsg');if(e)e.innerHTML='';},3000);
+    updBadges();
+  };
+  document.getElementById('resetProfBtn').onclick=render;
+}
+
+function v(id){const e=document.getElementById(id);return e?e.value:'';}
+
+function bindCV(){
+  const fi=document.getElementById('cvFI');
+  if(fi)fi.onchange=async e=>{
+    const f=e.target.files[0];if(!f)return;
+    try{const raw=await readFile(f);const c=raw.replace(/[^\x20-\x7E\n\r\t]/g,' ').replace(/\s{3,}/g,'\n').trim();
+      if(c.length<40){document.getElementById('cvErr').innerHTML=alrt('Could not read file. Try "Paste Text".','err');}
+      else{cvS.uploadText=c;cvS.uploadName=f.name;render();}
+    }catch(err){document.getElementById('cvErr').innerHTML=alrt('File error: '+err.message,'err');}
+  };
+  bindUZ('cvUZ','cvFI');
+  document.getElementById('genCVBtn').onclick=doGenCV;
+}
+
+async function doGenCV(){
+  if(!profile.name){setErr('cvErr','Complete your profile first.');return;}
+  const s=cvS;
+  if(s.mode==='jd'){const e=document.getElementById('cvJD');if(e)s.jd=e.value;}
+  else if(s.inM==='paste'){const e=document.getElementById('cvPaste');if(e)s.pasteText=e.value;}
+  const inp=s.mode==='jd'?s.jd:s.inM==='upload'?s.uploadText:s.pasteText;
+  if(s.mode!=='jd'&&!inp.trim()){setErr('cvErr','Please upload or paste your CV.');return;}
+  clearErr('cvErr');setSpin('cvSpin','Analyzing · Optimizing keywords · Rewriting…');dis('genCVBtn',true);
+  const prompt=`CANDIDATE:\n${profStr()}\nRegion:${s.region} Template:${s.tmpl} Photo:${s.photo}\n${s.mode==='jd'?'JOB DESCRIPTION:\n'+inp:'EXISTING CV TO REWRITE:\n'+inp}\n\nGenerate complete ATS-optimized CV. Strong action verbs (Led,Managed,Executed,Delivered,Coordinated,Implemented). Quantifiable achievements. NO weak phrases. Format with ════ dividers.\n${s.photo?'Include a [PHOTO] placeholder at the top of the CV header for Middle East applications.':''}\nReturn ONLY JSON:\n{"cv_text":"full cv","ats_score":85,"keyword_match":82,"formatting_score":91,"skills_score":79,"keywords_found":["k1"],"improvements":["i1"],"strong_points":["s1"],"weak_phrases_removed":["p1"],"action_verbs_added":["Led"]}`;
+  try{const raw=await ai(prompt,2000);cvS.result=pj(raw);clearSpin('cvSpin');document.getElementById('cvRes').innerHTML=renderCVResult(cvS.result);}
+  catch(e){clearSpin('cvSpin');setErr('cvErr',e.message);}
+  dis('genCVBtn',false);
+}
+
+function bindCover(){
+  document.getElementById('genCLBtn').onclick=async()=>{
+    if(!profile.name){setErr('clErr','Complete your profile first.');return;}
+    clS.company=v('clCo');clS.manager=v('clMgr');clS.jd=v('clJD');
+    const words={short:150,standard:250,detailed:400};
+    clearErr('clErr');setSpin('clSpin','Crafting a natural human-sounding letter…');dis('genCLBtn',true);
+    const prompt=`CANDIDATE:${profile.name}|${profile.title}\nEmail:${profile.email}|Phone:${profile.phone}\nExp:${(profile.experience||'').substring(0,600)}\nSkills:${profile.skills}\nSummary:${profile.summary}\n\nCompany:${clS.company||'the hotel'}\nHiring Manager:${clS.manager||'Hiring Manager'}\nJD:${clS.jd||'General hospitality position'}\nLength:~${words[clS.length]} words\n\nWrite ${clS.length} cover letter. Return ONLY JSON:\n{"cover_letter":"full letter","tone_notes":"one line","keywords_included":["k1","k2"]}\nRULES: Confident human professional. NEVER "I am excited to apply" or AI phrases. Specific achievements. Strong hook opening.`;
+    try{const raw=await ai(prompt,1200);clS.result=pj(raw);clearSpin('clSpin');document.getElementById('clRes').innerHTML=renderCLResult(clS.result);}
+    catch(e){clearSpin('clSpin');setErr('clErr',e.message);}
+    dis('genCLBtn',false);
+  };
+}
+
+function bindAnalyze(){
+  document.getElementById('ajBtn').onclick=async()=>{
+    const jd=v('ajJD').trim();if(!jd){setErr('ajErr','Paste a job description.');return;}
+    ajS.jd=jd;clearErr('ajErr');setSpin('ajSpin','Extracting keywords · Analyzing ATS patterns…');dis('ajBtn',true);
+    const prompt=`Analyze this hospitality JD. Candidate:${JSON.stringify({title:profile.title,skills:profile.skills,exp:(profile.experience||'').substring(0,400)})}\nJD:${jd}\nReturn ONLY JSON:\n{"role":"","hotel_chain":"","ats_software":"","experience_required":"","contract_type":"","must_have_skills":["s1"],"nice_to_have":["s1"],"keywords":["k1"],"certifications_required":["c1"],"soft_skills":["s1"],"red_flags":["g1"],"match_score":74,"fit_summary":"Two sentences.","interview_tips":["t1","t2","t3"]}`;
+    try{const raw=await ai(prompt,1000);ajS.result=pj(raw);clearSpin('ajSpin');document.getElementById('ajRes').innerHTML=renderAJResult(ajS.result);}
+    catch(e){clearSpin('ajSpin');setErr('ajErr',e.message);}
+    dis('ajBtn',false);
+  };
+}
+
+function bindHealth(){
+  const fi=document.getElementById('hhFI');
+  if(fi)fi.onchange=async e=>{
+    const f=e.target.files[0];if(!f)return;
+    try{const raw=await readFile(f);const c=raw.replace(/[^\x20-\x7E\n\r\t]/g,' ').replace(/\s{3,}/g,'\n').trim();
+      if(c.length<40){setErr('hhErr','Could not read. Try Paste Text.');}
+      else{hhS.uploadText=c;hhS.uploadName=f.name;render();}
+    }catch(err){setErr('hhErr','File error: '+err.message);}
+  };
+  bindUZ('hhUZ','hhFI');
+  document.getElementById('hhBtn').onclick=async()=>{
+    if(hhS.inM==='paste'){const e=document.getElementById('hhPaste');if(e)hhS.pasteText=e.value;}
+    const content=hhS.inM==='upload'?hhS.uploadText:hhS.pasteText;
+    if(!content.trim()){setErr('hhErr','Upload or paste your CV first.');return;}
+    clearErr('hhErr');setSpin('hhSpin','Scanning weak language · ATS issues · Missing sections…');dis('hhBtn',true);
+    const prompt=`Analyze this CV thoroughly.\nCV:\n${content}\nReturn ONLY JSON:\n{"overall_score":62,"sections_found":["s1"],"sections_missing":["s1"],"weak_phrases":["p1"],"formatting_issues":["f1"],"critical_fixes":["c1"],"quick_wins":["w1"],"industry_keywords_missing":["k1"],"estimated_ats_pass_rate":35,"has_quantified_achievements":false,"verdict":"One honest paragraph."}`;
+    try{const raw=await ai(prompt,1000);hhS.result=pj(raw);clearSpin('hhSpin');document.getElementById('hhRes').innerHTML=renderHHResult(hhS.result);}
+    catch(e){clearSpin('hhSpin');setErr('hhErr',e.message);}
+    dis('hhBtn',false);
+  };
+}
+
+function bindCompare(){
+  document.getElementById('cmpBtn').onclick=async()=>{
+    const jd0=v('jd0').trim(),jd1=v('jd1').trim(),jd2=v('jd2').trim();
+    if(!jd0){setErr('cmpErr','Paste at least one job description.');return;}
+    cmpS.jds=[jd0,jd1,jd2];
+    const jds=[jd0,jd1,jd2].filter(Boolean);
+    clearErr('cmpErr');setSpin('cmpSpin','Comparing your fit across '+jds.length+' job postings…');dis('cmpBtn',true);
+    const prompt=`Compare candidate fit for these ${jds.length} hospitality job postings.\nCANDIDATE:\n${profStr()}\n${jds.map((j,i)=>`JOB ${i+1}:\n${j}`).join('\n\n')}\n\nReturn ONLY JSON:\n{"recommendation":"2 sentences on best match and why","jobs":[{"role":"","company":"","match_score":80,"strengths":["s1","s2"],"gaps":["g1"],"salary_range":"USD 3,500-4,500/mo"}]}\nProvide one jobs entry per job description provided.`;
+    try{const raw=await ai(prompt,1200);cmpS.result=pj(raw);clearSpin('cmpSpin');document.getElementById('cmpRes').innerHTML=renderCmpResult(cmpS.result);}
+    catch(e){clearSpin('cmpSpin');setErr('cmpErr',e.message);}
+    dis('cmpBtn',false);
+  };
+}
+
+function bindMulti(){
+  document.getElementById('mlBtn').onclick=async()=>{
+    if(!profile.name){setErr('mlErr','Complete your profile first.');return;}
+    clearErr('mlErr');setSpin('mlSpin',`Translating your CV to ${mlS.lang}…`);dis('mlBtn',true);
+    const prompt=`Translate and culturally adapt this hospitality CV to ${mlS.lang}.\nCANDIDATE:\n${profStr()}\nTarget market: ${mlS.lang}-speaking hotel industry.\nReturn ONLY JSON:\n{"cv_translated":"complete CV in ${mlS.lang}, culturally appropriate, ATS-optimized for local market","cultural_notes":"2 sentences on cultural adaptations made"}\nRULES: Native ${mlS.lang} quality. Adapt section names, formats, and conventions for that market. Keep professional hospitality terminology. Do NOT just machine-translate — adapt culturally.`;
+    try{const raw=await ai(prompt,2000);mlS.result=pj(raw);clearSpin('mlSpin');document.getElementById('mlRes').innerHTML=renderMLResult(mlS.result);}
+    catch(e){clearSpin('mlSpin');setErr('mlErr',e.message);}
+    dis('mlBtn',false);
+  };
+}
+
+function bindSalary(){
+  document.getElementById('salBtn').onclick=async()=>{
+    const role=v('salRole').trim();if(!role){setErr('salErr','Enter a job title.');return;}
+    salS.role=role;salS.exp=v('salExp');
+    clearErr('salErr');setSpin('salSpin','Researching salary ranges and negotiation tactics…');dis('salBtn',true);
+    const prompt=`Provide a detailed salary guide for: ${role} in ${salS.region} with ${salS.exp||'unspecified'} experience.\nCandidate profile:${profile.name?`${profile.title}, ${profile.experience?.substring(0,200)}`:'Not provided'}\n\nReturn ONLY JSON:\n{"role":"${role}","region":"${salS.region}","entry_range":"USD 2,000-3,000/mo","mid_range":"USD 3,500-5,000/mo","senior_range":"USD 5,500-8,000/mo","your_estimated":"USD 3,800-4,500/mo","market_position":65,"market_context":"2 sentences on market conditions","benefits":["Housing Allowance","Flight Tickets","Medical","Meals","Service Charge"],"negotiation_tips":["tip1","tip2","tip3","tip4"],"what_to_say":"exact script for salary negotiation in interview","hotel_chain_rates":[{"chain":"Marriott","range":"USD 3,500-4,800"},{"chain":"Hilton","range":"USD 3,200-4,500"},{"chain":"Jumeirah","range":"USD 4,000-5,500"},{"chain":"Accor","range":"USD 3,000-4,200"}]}\nBe specific and realistic for the region and role. Include monthly AND annual where helpful.`;
+    try{const raw=await ai(prompt,1400);salS.result=pj(raw);clearSpin('salSpin');document.getElementById('salRes').innerHTML=renderSalResult(salS.result);}
+    catch(e){clearSpin('salSpin');setErr('salErr',e.message);}
+    dis('salBtn',false);
+  };
+}
+
+function bindTracker(){
+  document.getElementById('addTrkBtn').onclick=()=>{
+    const hotel=v('trkHotel').trim();if(!hotel){return;}
+    const job={hotel,role:v('trkRole'),date:v('trkDate')||new Date().toISOString().split('T')[0],status:v('trkStatus')||'Applied',notes:v('trkNotes')};
+    jobTracker.unshift(job);store.jobTracker=jobTracker;sv(store);render();
+  };
+}
+
+function updateTrkStatus(i,status){jobTracker[i].status=status;store.jobTracker=jobTracker;sv(store);render();}
+function delTrk(i){jobTracker.splice(i,1);store.jobTracker=jobTracker;sv(store);render();}
+
+function bindReference(){
+  document.getElementById('refBtn').onclick=async()=>{
+    if(!profile.name){setErr('refErr','Complete your profile first.');return;}
+    refS.refName=v('refName');refS.refTitle=v('refTitle');refS.refCompany=v('refCompany')||'';refS.refRelation=v('refRelation')||'';refS.candidateRole=v('refCandRole');
+    clearErr('refErr');
+    const isLetter=refS.type==='reference_letter';
+    setSpin('refSpin',isLetter?'Writing your professional reference letter…':'Writing your reference request email…');dis('refBtn',true);
+    const prompt=isLetter?
+      `Write a professional reference letter for a hospitality/culinary professional.\nREFERENCE WRITER: ${refS.refName||'[Name]'}, ${refS.refTitle||'[Title]'} at ${refS.refCompany||'[Hotel]'} — ${refS.refRelation||'direct supervisor'}.\nCANDIDATE: ${profile.name}, ${profile.title}, ${(profile.experience||'').substring(0,400)}, Skills: ${profile.skills}\nTARGET ROLE: ${refS.candidateRole||profile.title}\n\nReturn ONLY JSON:\n{"letter":"full formal reference letter on hotel letterhead format, 3 paragraphs, highlights specific achievements and character","tips":"One sentence tip for the candidate about using this reference"}\nTone: Formal, warm, specific. Include concrete examples. Sound like a real chef/F&B director wrote it.`
+      :`Write a polite professional email from ${profile.name} requesting a reference from their manager.\nCANDIDATE: ${profile.name}, requesting reference from ${refS.refName||'manager'} (${refS.refTitle||'their supervisor'}).\nTARGET ROLE: ${refS.candidateRole||profile.title}\n\nReturn ONLY JSON:\n{"email":"full email with subject line, polite and professional, explains the role applied for, offers to provide any info needed","tips":"One tip about following up on this reference request"}`;
+    try{const raw=await ai(prompt,1000);refS.result=pj(raw);clearSpin('refSpin');document.getElementById('refRes').innerHTML=renderRefResult(refS.result);}
+    catch(e){clearSpin('refSpin');setErr('refErr',e.message);}
+    dis('refBtn',false);
+  };
+}
+
+// ══════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════
+function setErr(id,msg){const e=document.getElementById(id);if(e)e.innerHTML=alrt(msg,'err');}
+function clearErr(id){const e=document.getElementById(id);if(e)e.innerHTML='';}
+function setSpin(id,txt){const e=document.getElementById(id);if(e)e.innerHTML=spinner(txt);}
+function clearSpin(id){const e=document.getElementById(id);if(e)e.innerHTML='';}
+function dis(id,val){const e=document.getElementById(id);if(e)e.disabled=val;}
+
+function bindUZ(zoneId,inputId){
+  const zone=document.getElementById(zoneId);
+  const fi=document.getElementById(inputId);
+  if(!zone||!fi)return;
+  zone.ondragover=e=>{e.preventDefault();zone.classList.add('drag');};
+  zone.ondragleave=()=>zone.classList.remove('drag');
+  zone.ondrop=async e=>{
+    e.preventDefault();zone.classList.remove('drag');
+    const f=e.dataTransfer.files[0];
+    if(f){const ev=new Event('change');Object.defineProperty(ev,'target',{value:{files:[f]}});fi.onchange&&fi.onchange({target:{files:[f]}});}
+  };
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+render();
+</script>
+</body>
+</html>
